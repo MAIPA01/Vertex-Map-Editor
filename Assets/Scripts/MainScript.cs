@@ -109,6 +109,13 @@ public class MainScript : MonoBehaviour
     [Header("Draw Texture")]
     [SerializeField] private RawImage drawImage;
 
+    // Grid Texture
+    private Texture2D gridTex = null;
+    [Header("Grid Texture")]
+    [SerializeField] private int gridPixelsPerPixelWidth = 20;
+    [SerializeField] private int gridPixelsPerPixelHeight = 20;
+    [SerializeField] private RawImage gridImage;
+
     // Moves
     private List<IMove> moves = new();
 
@@ -333,9 +340,9 @@ public class MainScript : MonoBehaviour
     }
 
     // Scale
-    [Header("Scale")]
     Vector2 minScale = Vector2.one;
     Vector2 currentScale = Vector2.one;
+    [Header("Scale")]
     public float scaleSensitivity = 1.0f;
     bool isScaling = false;
     bool IsScaling
@@ -391,8 +398,8 @@ public class MainScript : MonoBehaviour
     }
 
     // Move
-    [Header("Movement")]
     Vector2 currentMove = Vector2.zero;
+    [Header("Movement")]
     public float moveSensitivity = 1.0f;
     /*bool isMovingHorizontal = false;
     bool IsMovingHorizontal
@@ -500,6 +507,29 @@ public class MainScript : MonoBehaviour
         pointerTex.Apply();
     }
 
+    // Grid
+    void GenerateGrid(int mapWidth, int mapHeight)
+    {
+        gridTex = new Texture2D(mapWidth * (gridPixelsPerPixelWidth + 1) + 1, mapHeight * (gridPixelsPerPixelHeight + 1) + 1);
+        for (int x = 0; x <= mapWidth * (gridPixelsPerPixelWidth + 1) + 1; x++)
+        {
+            for (int y = 0; y <= mapHeight * (gridPixelsPerPixelHeight + 1) + 1; y++)
+            {
+                if (x % (gridPixelsPerPixelWidth + 1) == 0 || y % (gridPixelsPerPixelHeight + 1) == 0)
+                {
+                    gridTex.SetPixel(x, y, Color.black);
+                }
+                else
+                {
+                    gridTex.SetPixel(x, y, new Color(0, 0, 0, 0));
+                }
+            }
+        }
+        gridTex.Apply();
+        gridImage.texture = gridTex;
+        gridImage.color += new Color(0, 0, 0, 1);
+    }
+
     // Image
     public void LoadImage()
     {
@@ -512,6 +542,7 @@ public class MainScript : MonoBehaviour
             mapTex.filterMode = FilterMode.Point;
             mapTex.LoadImage(bytes);
             image.texture = mapTex;
+            image.color += new Color(0,0,0,1f);
 
             isTextureLoaded = true;
 
@@ -530,8 +561,12 @@ public class MainScript : MonoBehaviour
             }
             drawTex.Apply();
             drawImage.texture = drawTex;
+            drawImage.color += new Color(0, 0, 0, 1f);
             pointerTex.Apply();
             pointerImage.texture = pointerTex;
+            pointerImage.color += new Color(0, 0, 0, 1f);
+
+            GenerateGrid(mapTex.width, mapTex.height);
 
             ResetSettings();
         }
@@ -573,6 +608,7 @@ public class MainScript : MonoBehaviour
             mapTex.filterMode = FilterMode.Point;
             mapTex.LoadImage(data.mapTexture);
             image.texture = mapTex;
+            image.color += new Color(0, 0, 0, 1f);
 
             isTextureLoaded = true;
 
@@ -580,6 +616,7 @@ public class MainScript : MonoBehaviour
             drawTex.filterMode = FilterMode.Point;
             drawTex.LoadImage(data.drawTexture);
             drawImage.texture = drawTex;
+            drawImage.color += new Color(0, 0, 0, 1f);
 
             pointerTex = new(mapTex.width, mapTex.height);
             pointerTex.filterMode = FilterMode.Point;
@@ -593,6 +630,9 @@ public class MainScript : MonoBehaviour
             }
             pointerTex.Apply();
             pointerImage.texture = pointerTex;
+            pointerImage.color += new Color(0, 0, 0, 1f);
+
+            GenerateGrid(mapTex.width, mapTex.height);
 
             ResetSettings();
         }
@@ -866,12 +906,26 @@ public class MainScript : MonoBehaviour
     public void EnableToolCursor()
     {
         isCursorInView = true;
-        ToolCursor();
+        if (scrollMoveEnabled)
+        {
+            ScrollMoveCursor();
+        }
+        else
+        {
+            ToolCursor();
+        }
     }
     public void DisableToolCursor()
     {
         isCursorInView = false;
-        DefaultCursor();
+        if (scrollMoveEnabled)
+        {
+            ScrollMoveCursor();
+        }
+        else
+        {
+            DefaultCursor();
+        }
     }
     void DefaultCursor()
     {
@@ -884,16 +938,16 @@ public class MainScript : MonoBehaviour
             switch (CurrentTool)
             {
                 case Tool.Brush:
-                    Cursor.SetCursor(brushCursor, Vector2.zero, CursorMode.Auto);
+                    Cursor.SetCursor(brushCursor, new Vector2(0, 64), CursorMode.Auto);
                     break;
                 case Tool.Eraser:
-                    Cursor.SetCursor(eraserCursor, Vector2.zero, CursorMode.Auto);
+                    Cursor.SetCursor(eraserCursor, new Vector2(23, 64), CursorMode.Auto);
                     break;
                 case Tool.DisplacerEraser:
-                    Cursor.SetCursor(displacerEraserCursor, Vector2.zero, CursorMode.Auto);
+                    Cursor.SetCursor(displacerEraserCursor, new Vector2(26, 38), CursorMode.Auto);
                     break;
                 case Tool.DisplacerBrush:
-                    Cursor.SetCursor(displacerBrushCursor, Vector2.zero, CursorMode.Auto);
+                    Cursor.SetCursor(displacerBrushCursor, new Vector2(38, 26), CursorMode.Auto);
                     break;
             }
         }
@@ -902,21 +956,21 @@ public class MainScript : MonoBehaviour
     {
         if (isCursorInView)
         {
-            Cursor.SetCursor(scaleCursor, Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(scaleCursor, new Vector2(32, 32), CursorMode.Auto);
         }
     }
     void MoveVerticalCursor()
     {
         if (isCursorInView)
         {
-            Cursor.SetCursor(moveVerticalyCursor, Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(moveVerticalyCursor, new Vector2(32,32), CursorMode.Auto);
         }
     }
     void MoveHorizontalCursor()
     {
         if (isCursorInView)
         {
-            Cursor.SetCursor(moveHorizontalyCursor, Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(moveHorizontalyCursor, new Vector2(32,32), CursorMode.Auto);
         }
     }
 
@@ -924,7 +978,7 @@ public class MainScript : MonoBehaviour
     {
         if (isCursorInView)
         {
-            Cursor.SetCursor(scrollMoveCursor, Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(scrollMoveCursor, new Vector2(32,32), CursorMode.Auto);
         }
     }
 }
