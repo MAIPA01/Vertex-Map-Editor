@@ -4045,8 +4045,8 @@ MonoBehaviour:
   viewRect: {fileID: 619533600}
   pointerImage: {fileID: 374418452}
   drawImage: {fileID: 2067072000}
-  gridPixelsPerPixelWidth: 25
-  gridPixelsPerPixelHeight: 25
+  gridPixelsPerPixelWidth: 10
+  gridPixelsPerPixelHeight: 10
   gridImage: {fileID: 1706076710}
   scaleSensitivity: 0.1
   moveSensitivity: 3

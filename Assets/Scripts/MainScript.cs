@@ -112,8 +112,8 @@ public class MainScript : MonoBehaviour
     // Grid Texture
     private Texture2D gridTex = null;
     [Header("Grid Texture")]
-    [SerializeField] private int gridPixelsPerPixelWidth = 20;
-    [SerializeField] private int gridPixelsPerPixelHeight = 20;
+    [SerializeField] private int gridPixelsPerPixelWidth = 25;
+    [SerializeField] private int gridPixelsPerPixelHeight = 25;
     [SerializeField] private RawImage gridImage;
 
     // Moves
@@ -510,7 +510,8 @@ public class MainScript : MonoBehaviour
     // Grid
     void GenerateGrid(int mapWidth, int mapHeight)
     {
-        gridTex = new Texture2D(mapWidth * (gridPixelsPerPixelWidth + 1) + 1, mapHeight * (gridPixelsPerPixelHeight + 1) + 1);
+        gridTex = new(mapWidth * (gridPixelsPerPixelWidth + 1) + 1, mapHeight * (gridPixelsPerPixelHeight + 1) + 1);
+        gridTex.filterMode = FilterMode.Point;
         for (int x = 0; x <= mapWidth * (gridPixelsPerPixelWidth + 1) + 1; x++)
         {
             for (int y = 0; y <= mapHeight * (gridPixelsPerPixelHeight + 1) + 1; y++)
