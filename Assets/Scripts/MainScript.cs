@@ -534,8 +534,8 @@ public class MainScript : MonoBehaviour
     // Image
     public void LoadImage()
     {
-        StandaloneFileBrowserWindows fileBrowser = new();
-        string[] filePaths = fileBrowser.OpenFilePanel("Load Map Image", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("map image", new string[] { "png" }) }, false);
+        //StandaloneFileBrowserWindows fileBrowser = new();
+        string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Load Map Image", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("map image", new string[] { "png" }) }, false);
         if (filePaths.Length != 0)
         {
             byte[] bytes = File.ReadAllBytes(filePaths[0]);
@@ -581,8 +581,8 @@ public class MainScript : MonoBehaviour
     {
         if (isTextureLoaded)
         {
-            StandaloneFileBrowserWindows browser = new();
-            string filePath = browser.SaveFilePanel("Save Vertex Map Image", Application.dataPath, "VertexMap.png", new ExtensionFilter[] { new ExtensionFilter("Vertex Map Image", new string[] { "png" }) });
+            //StandaloneFileBrowserWindows browser = new();
+            string filePath = StandaloneFileBrowser.SaveFilePanel("Save Vertex Map Image", Application.dataPath, "VertexMap.png", new ExtensionFilter[] { new ExtensionFilter("Vertex Map Image", new string[] { "png" }) });
             if (filePath != null && filePath != "")
             {
                 byte[] bytes = drawTex.EncodeToPNG();
@@ -594,8 +594,8 @@ public class MainScript : MonoBehaviour
     // Draft
     public void LoadDraft()
     {
-        StandaloneFileBrowserWindows fileBrowser = new();
-        string[] filePaths = fileBrowser.OpenFilePanel("Load Vertex Map Draft", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("Vertex Map Draft", new string[] { "vmd" }) }, false);
+        //StandaloneFileBrowserWindows fileBrowser = new();
+        string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Load Vertex Map Draft", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("Vertex Map Draft", new string[] { "vmd" }) }, false);
         if (filePaths.Length != 0)
         {
             DraftData data = FileWriter.ReadFromBinaryFile<DraftData>(filePaths[0]);
@@ -666,8 +666,8 @@ public class MainScript : MonoBehaviour
                     drawTex.Apply();
                     currentVertexGroup.Clear();
 
-                    StandaloneFileBrowserWindows browser = new();
-                    string filePath = browser.SaveFilePanel("Save Vertex Map Draft", Application.dataPath, "VertexMapDraft.vmd", new ExtensionFilter[] { new ExtensionFilter("Vertex Map Draft", new string[] { "vmd" }) });
+                    //StandaloneFileBrowserWindows browser = new();
+                    string filePath = StandaloneFileBrowser.SaveFilePanel("Save Vertex Map Draft", Application.dataPath, "VertexMapDraft.vmd", new ExtensionFilter[] { new ExtensionFilter("Vertex Map Draft", new string[] { "vmd" }) });
                     if (filePath != null && filePath != "")
                     {
                         DraftData data = new()
@@ -690,8 +690,8 @@ public class MainScript : MonoBehaviour
                 return;
             }
 
-            StandaloneFileBrowserWindows browser = new();
-            string filePath = browser.SaveFilePanel("Save Vertex Map Draft", Application.dataPath, "VertexMapDraft.vmd", new ExtensionFilter[] { new ExtensionFilter("Vertex Map Draft", new string[] { "vmd" }) });
+            //StandaloneFileBrowserWindows browser = new();
+            string filePath = StandaloneFileBrowser.SaveFilePanel("Save Vertex Map Draft", Application.dataPath, "VertexMapDraft.vmd", new ExtensionFilter[] { new ExtensionFilter("Vertex Map Draft", new string[] { "vmd" }) });
             if (filePath != null && filePath != "")
             {
                 DraftData data = new()

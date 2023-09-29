@@ -62,8 +62,9 @@ public class Decoder : MonoBehaviour
     [Button()]
     public void LoadVertexMap()
     {
-        StandaloneFileBrowserWindows browser = new StandaloneFileBrowserWindows();
-        string[] filePaths = browser.OpenFilePanel("Load Vertex Map", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("Vertex Map", new string[] { "png" }) }, false);
+        //StandaloneFileBrowserWindows browser = new StandaloneFileBrowserWindows();
+        //string[] filePaths = browser.OpenFilePanel("Load Vertex Map", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("Vertex Map", new string[] { "png" }) }, false);
+        string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Load Vertex Map", Application.dataPath, new ExtensionFilter[] { new ExtensionFilter("Vertex Map", new string[] { "png" }) }, false);
         if (filePaths.Length != 0)
         {
             byte[] bytes = File.ReadAllBytes(filePaths[0]);
